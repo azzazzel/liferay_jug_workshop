@@ -30,10 +30,17 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.URLCodec;
 
 /**
+ * This is a standard Java JAX-RS application that uses internal OSGi services 
+ * to get the uses who are members of the {@code BGJUG team} user group
+ * and return JSON formated information about them
+ * 
  * @author Milen Dyankov
  */
 @ApplicationPath("/jug-leaders")
-@Component(immediate = true, service = Application.class)
+@Component(
+	immediate = true, 
+	service = Application.class
+)
 public class JugLeadersApplication extends Application {
 
 	public Set<Object> getSingletons() {
@@ -83,6 +90,9 @@ public class JugLeadersApplication extends Application {
 		return Response.status(404).build();		
 	}
 
+	/**
+	 * Data transfer object representing the user 
+	 */
 	class UserDTO {
 		String name;
 		String description;
@@ -91,6 +101,9 @@ public class JugLeadersApplication extends Application {
 		List<WebsiteDTO> websites;
 	}
 
+	/**
+	 * Data transfer object representing website
+	 */
 	class WebsiteDTO {
 		String url;
 		String type;
