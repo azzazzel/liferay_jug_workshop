@@ -22,7 +22,7 @@
 	             <aui:input name="date" />
 	             <aui:select name="venueId" label="venue" >
              		<aui:option label="no-venue" value="" />
-	             	<c:forEach items="<%=VenueLocalServiceUtil.getGroupVenues(themeDisplay, -1, -1) %>" var="venue">
+	             	<c:forEach items="<%=VenueLocalServiceUtil.getGroupVenues(company.getCompanyId(), scopeGroupId) %>" var="venue">
 	             		<aui:option label="${venue.name}" value="${venue.venueId}" selected="${venue.venueId == venueId}"/>
 	             	</c:forEach>
 	             </aui:select>

@@ -156,11 +156,6 @@
 	<portlet:param name="navigation" value="venues" />
 </portlet:renderURL>
 
-<portlet:renderURL var="editVenueURL">
-	<portlet:param name="mvcPath" value="/venue_edit.jsp" />
-	<portlet:param name="navigation" value="venues" />
-</portlet:renderURL>
-
 <portlet:actionURL name='saveVenue' var="saveVenueURL" >
 	<portlet:param name="navigation" value="venues" />
 </portlet:actionURL>

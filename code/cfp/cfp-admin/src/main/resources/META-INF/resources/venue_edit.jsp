@@ -15,9 +15,14 @@
 	
 	        <aui:model-context bean="<%= venue %>" model="<%= Venue.class %>" />
 	
-	        <aui:input type="hidden" name="venueId"
+	        <aui:input 
+	        	type="hidden" 
+	        	name="venueId"
 	            value='<%= venue == null ? "" : venue.getVenueId() %>' />
 	
+			<%--
+				The venue fields 
+			 --%>
 	        <aui:fieldset>
 	             <aui:input name="name" />
 	             <aui:input name="address" />
@@ -25,6 +30,9 @@
 	             <aui:input id="lng" name="longitude" />
 	        </aui:fieldset>
 
+			<%--
+				Display a map to select venue location
+			 --%>
 			<liferay-map:map-display 
 				geolocation="true"
 				latitude="<%= venue == null ? 42.66677500000001 : venue.getLatitude() %>"
@@ -32,22 +40,23 @@
 				name="venueMap"
 			/>
 	
+			<%--
+				Finally the "Save" and "Cancel" buttons
+			 --%>
 	        <aui:button-row>
 	             <aui:button type="submit" />
 	             <aui:button onClick="<%= venuesURL %>" type="cancel"  />
 	        </aui:button-row>
 	</aui:form>
 	
+	<%--
+		Some JavaScript to configure the map
+	 --%>
 	<aui:script use="liferay-map-common">
-
 		var configureMap = function() {
 		    if (typeof Liferay.MapBase !== 'undefined') {
-		    	console.log("MapBase loaded!!!");
  				Liferay.MapBase.get('_<%=namespace %>_venueMap', function(map){
-					console.log(map);
 					map.on('positionChange', function (event) {
-						console.log("positionChange")
-						console.log(event)
 						if (typeof event.newVal.address !== 'undefined') {
 							document.getElementById('_<%=namespace %>_address').value = event.newVal.address;
 						}
@@ -63,7 +72,6 @@
 		};
 		
 		configureMap();
-	
 	</aui:script>
 
 </div>

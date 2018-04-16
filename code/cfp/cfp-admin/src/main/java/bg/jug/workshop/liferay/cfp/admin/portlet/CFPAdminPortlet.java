@@ -28,7 +28,9 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import bg.jug.workshop.liferay.cfp.admin.constants.CFPAdminPortletKeys;
+import bg.jug.workshop.liferay.cfp.model.Event;
 import bg.jug.workshop.liferay.cfp.model.Talk;
+import bg.jug.workshop.liferay.cfp.model.Venue;
 import bg.jug.workshop.liferay.cfp.service.EventLocalService;
 import bg.jug.workshop.liferay.cfp.service.TalkLocalService;
 import bg.jug.workshop.liferay.cfp.service.VenueLocalService;
@@ -145,8 +147,9 @@ public class CFPAdminPortlet extends MVCPortlet {
 			deleteEventIds = ParamUtil.getLongValues(actionRequest, "rowIds");
 		}
 
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Event.class.getName(), actionRequest);
 		for (long deleteVenueId : deleteEventIds) {
-			eventLocalService.deleteEvent(deleteVenueId);
+			eventLocalService.deleteEvent(deleteVenueId, serviceContext);
 		}		
 	}
 	
@@ -162,8 +165,9 @@ public class CFPAdminPortlet extends MVCPortlet {
 			deleteVenueIds = ParamUtil.getLongValues(actionRequest, "rowIds");
 		}
 
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Venue.class.getName(), actionRequest);
 		for (long deleteVenueId : deleteVenueIds) {
-			venueLocalService.deleteVenue(deleteVenueId);
+			venueLocalService.deleteVenue(deleteVenueId, serviceContext);
 		}		
 	}
 	
@@ -179,7 +183,6 @@ public class CFPAdminPortlet extends MVCPortlet {
 		}
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(Talk.class.getName(), actionRequest);
-
 		for (long deleteTalkId : deleteTalkIds) {
 			talkLocalService.deleteTalk(deleteTalkId, serviceContext);
 		}		
