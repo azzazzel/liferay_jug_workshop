@@ -1,0 +1,3 @@
+Bundle-Name: user-wrapper
+Bundle-SymbolicName: bg.jug.workshop.liferay.user.wrapper
+Bundle-Version: 1.0-SNAPSHOT

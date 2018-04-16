@@ -1,0 +1,7 @@
+Bundle-Name: jug-rest
+Bundle-SymbolicName: bg.jug.workshop.liferay.rest
+Bundle-Version: 1.0-SNAPSHOT
+Liferay-Configuration-Path: /configuration
+
+-includeresource: lib/gson.jar=gson*.jar
+Bundle-ClassPath: .,lib/gson.jar

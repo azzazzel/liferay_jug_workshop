@@ -1,0 +1,12 @@
+Bundle-Name: cfp-admin
+Bundle-SymbolicName: bg.jug.workshop.liferay.cfp.admin
+Bundle-Version: 1.0-SNAPSHOT
+Export-Package: bg.jug.workshop.liferay.cfp.admin.constants
+-jsp: *.jsp,*.jspf
+-plugin.jsp: com.liferay.ant.bnd.jsp.JspAnalyzerPlugin
+-plugin.resourcebundle: com.liferay.ant.bnd.resource.bundle.ResourceBundleLoaderAnalyzerPlugin
+-plugin.sass: com.liferay.ant.bnd.sass.SassAnalyzerPlugin
+-sass: *
+Import-Package: \
+	com.liferay.dynamic.data.mapping.kernel,\
+	*

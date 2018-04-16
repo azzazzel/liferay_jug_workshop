@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="bg.jug.workshop.liferay.cfp.model.Event">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="eventId" type="long" />
+		<field name="name" type="String" />
+		<field name="date" type="Date">
+			<hint name="show-time">false</hint>
+		</field>
+		<field name="website" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
+		<field name="venueId" type="long" />
+		<field name="calendarBookingId" type="long" />
+	</model>
+	<model name="bg.jug.workshop.liferay.cfp.model.Talk">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="talkId" type="long" />
+		<field name="title" type="String">
+			<hint name="max-length">200</hint>
+		</field>
+		<field name="data" type="String">
+			<hint-collection name="CLOB" />
+		</field>
+		<field name="structureId" type="long" />
+		<field name="templateId" type="long" />
+	</model>
+	<model name="bg.jug.workshop.liferay.cfp.model.Venue">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="venueId" type="long" />
+		<field name="name" type="String" />
+		<field name="address" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
+		<field name="latitude" type="double" />
+		<field name="longitude" type="double" />
+	</model>
+</model-hints>
