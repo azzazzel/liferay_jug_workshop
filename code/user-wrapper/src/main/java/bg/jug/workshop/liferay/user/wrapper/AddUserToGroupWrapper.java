@@ -1,24 +1,17 @@
 package bg.jug.workshop.liferay.user.wrapper;
 
-import com.liferay.portal.kernel.service.UserLocalServiceWrapper;
-import com.liferay.counter.kernel.service.CounterLocalService;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.model.UserGroup;
-import com.liferay.portal.kernel.model.UserGroupModel;
-import com.liferay.portal.kernel.model.UserGroupRole;
-import com.liferay.portal.kernel.service.ResourceLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceWrapper;
-import com.liferay.portal.kernel.service.UserGroupLocalService;
-import com.liferay.portal.kernel.service.UserGroupLocalServiceUtil;
-
-import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceWrapper;
+import com.liferay.portal.kernel.service.UserGroupLocalService;
+import com.liferay.portal.kernel.service.UserLocalServiceWrapper;
 
 /**
  * @author Milen Dyankov
@@ -32,12 +25,6 @@ public class AddUserToGroupWrapper extends UserLocalServiceWrapper {
 
 	@Reference
 	private UserGroupLocalService userGroupLocalService;
-
-	@Reference
-	private CounterLocalService counterLocalService;
-
-	@Reference
-	private ResourceLocalService resourceLocalService;
 
 	@Override
 	public User addUser(long creatorUserId, long companyId, boolean autoPassword, String password1, String password2,
@@ -85,12 +72,8 @@ public class AddUserToGroupWrapper extends UserLocalServiceWrapper {
 		}
 		
 		String email = user.getEmailAddress();
-		System.out.println("Email is " + email);
 		if (email.endsWith("jug.bg"))  {
-			System.out.println("Adding " + user.getUserId() + " to user group!");
 			userGroupLocalService.addUserUserGroup(user.getUserId(), userGroup);
-		} else {
-			System.out.println("Email does not match ");
 		}
 		
 	}
