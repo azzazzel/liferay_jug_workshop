@@ -31,8 +31,8 @@ import com.liferay.portal.kernel.util.URLCodec;
 
 /**
  * This is a standard Java JAX-RS application that uses internal OSGi services 
- * to get the uses who are members of the {@code BGJUG team} user group
- * and return JSON formated information about them
+ * to get the people who are members of the {@code BGJUG team} user group
+ * and return JSON formatted information about them
  * 
  * @author Milen Dyankov
  */
