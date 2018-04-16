@@ -11,20 +11,28 @@ import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 /**
+ * This service contributes to AlloyEditor's menu the options to align paragraphs
+ * See {@link https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/modifying-an-editors-configuration}
+ * for more informaion.
+ * 
  * @author Milen Dyankov
  */
 @Component(
-		property = {
-				"editor.name=alloyeditor",
-		        "service.ranking:Integer=100"
-				},
-		service = EditorConfigContributor.class
-	)
+	property = {
+		"editor.name=alloyeditor",
+        "service.ranking:Integer=100"
+		},
+	service = EditorConfigContributor.class
+)
 public class BgJugAlloyEditorConfigContributor implements EditorConfigContributor {
 
 	@Override
-	public void populateConfigJSONObject(JSONObject jsonObject, Map<String, Object> inputEditorTaglibAttributes,
-			ThemeDisplay themeDisplay, RequestBackedPortletURLFactory requestBackedPortletURLFactory) {
+	public void populateConfigJSONObject(
+			JSONObject jsonObject, 
+			Map<String, Object> inputEditorTaglibAttributes,
+			ThemeDisplay themeDisplay, 
+			RequestBackedPortletURLFactory requestBackedPortletURLFactory
+		) {
 
 		JSONArray selections = jsonObject.getJSONObject("toolbars").getJSONObject("styles").getJSONArray("selections");
 		for (int i = 0; i < selections.length(); i++) {
