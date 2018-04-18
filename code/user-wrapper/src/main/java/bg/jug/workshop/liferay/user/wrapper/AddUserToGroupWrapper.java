@@ -48,9 +48,6 @@ public class AddUserToGroupWrapper extends UserLocalServiceWrapper {
 		super(null);
 	}
 
-	@Reference
-	private UserGroupLocalService userGroupLocalService;
-
 	@Override
 	public User addUser(long creatorUserId, long companyId, boolean autoPassword, String password1, String password2,
 			boolean autoScreenName, String screenName, String emailAddress, long facebookId, String openId,
@@ -100,9 +97,9 @@ public class AddUserToGroupWrapper extends UserLocalServiceWrapper {
 		 * - fetch*(...) - which returns `null` if the entity is not found
 		 * - get*(...) - which throws an exception if the entity is not found
 		 */
-		UserGroup userGroup = userGroupLocalService.fetchUserGroup(user.getCompanyId(), "BGJUG team");
+		UserGroup userGroup = _userGroupLocalService.fetchUserGroup(user.getCompanyId(), "BGJUG team");
 		if (userGroup == null) {
-			userGroup = userGroupLocalService.addUserGroup(
+			userGroup = _userGroupLocalService.addUserGroup(
 				serviceContext.getUserId(), 	// the id of the user group
 				serviceContext.getCompanyId(),	// the id of the instance (useful in mutli-tenant environment)
 				"BGJUG team",					// the name of the user group
@@ -113,9 +110,15 @@ public class AddUserToGroupWrapper extends UserLocalServiceWrapper {
 		
 		String email = user.getEmailAddress();
 		if (email.endsWith("jug.bg"))  {
-			userGroupLocalService.addUserUserGroup(user.getUserId(), userGroup);
+			_userGroupLocalService.addUserUserGroup(user.getUserId(), userGroup);
 		}
 		
 	}
 
+	@Reference
+	protected void setUserGroupLocalService(final UserGroupLocalService userGroupLocalService) {
+		_userGroupLocalService = userGroupLocalService;
+	}
+
+	private UserGroupLocalService _userGroupLocalService;
 }
