@@ -1,7 +1,12 @@
 package bg.jug.workshop.liferay.user.wrapper;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -92,28 +97,62 @@ public class AddUserToGroupWrapper extends UserLocalServiceWrapper {
 	 * @throws PortalException if any error occur 
 	 */
 	private void addUserToUserGroup(User user, ServiceContext serviceContext) throws PortalException {
+
+		String email = user.getEmailAddress();
+		if (email.endsWith("jug.bg"))  {
+			_userGroupLocalService.addUserUserGroup(user.getUserId(), getUserGroupId(user.getCompanyId(), serviceContext));
+		}
+		
+	}
+
+	/**
+	 * getUserGroupId: Looks up the user group id for the target group, will cache the value so we don't repeat
+	 * the lookups.
+	 * @param companyId Company id to get the user group from.
+	 * @param serviceContext The service context used to add a new user group if it doesn't already exist.
+	 * @return long The user group id.
+	 */
+	protected long getUserGroupId(final long companyId, final ServiceContext serviceContext) throws PortalException {
+		Long userGroupId = _bgjugTeamUserGroupIdMap.get(companyId);
+
+		if (Validator.isNotNull(userGroupId)) {
+			// have a cached value, let's use it.
+
+			return userGroupId;
+		}
+
+		// not yet in the cache, try to get the entity
+
 		/*
 		 * There are always 2 methods in every `*LocalService` for obtaining entities by id:
 		 * - fetch*(...) - which returns `null` if the entity is not found
 		 * - get*(...) - which throws an exception if the entity is not found
 		 */
-		UserGroup userGroup = _userGroupLocalService.fetchUserGroup(user.getCompanyId(), "BGJUG team");
-		if (userGroup == null) {
+		UserGroup userGroup = _userGroupLocalService.fetchUserGroup(companyId, BGJUG_TEAM_GROUP_NAME);
+
+		if (Validator.isNull(userGroup)) {
+			// doesn't already exist, let's create it.
+
 			userGroup = _userGroupLocalService.addUserGroup(
-				serviceContext.getUserId(), 	// the id of the user group
-				serviceContext.getCompanyId(),	// the id of the instance (useful in mutli-tenant environment)
-				"BGJUG team",					// the name of the user group
-				"",								// the description of the user group
-				serviceContext					// the context of the service request
+					serviceContext.getUserId(), 	// the id of the user group
+					companyId,	                    // the id of the instance (useful in mutli-tenant environment)
+					BGJUG_TEAM_GROUP_NAME,			// the name of the user group
+					StringPool.BLANK,				// the description of the user group
+					serviceContext					// the context of the service request
 			);
 		}
-		
-		String email = user.getEmailAddress();
-		if (email.endsWith("jug.bg"))  {
-			_userGroupLocalService.addUserUserGroup(user.getUserId(), userGroup);
-		}
-		
+
+		// save the id in the cache
+		_bgjugTeamUserGroupIdMap.put(companyId, userGroup.getUserGroupId());
+
+		// return it
+		return userGroup.getUserGroupId();
 	}
+
+	/**
+	 * BGJUG_TEAM_GROUP_NAME: Constant to hold the desired user group name.
+	 */
+	public static final String BGJUG_TEAM_GROUP_NAME = "BGJUG Team";
 
 	@Reference
 	protected void setUserGroupLocalService(final UserGroupLocalService userGroupLocalService) {
@@ -121,4 +160,5 @@ public class AddUserToGroupWrapper extends UserLocalServiceWrapper {
 	}
 
 	private UserGroupLocalService _userGroupLocalService;
+	private Map<Long, Long> _bgjugTeamUserGroupIdMap = new HashMap<>();
 }
