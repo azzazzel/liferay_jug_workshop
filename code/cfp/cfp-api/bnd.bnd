@@ -1,9 +1,0 @@
-Bundle-Name: cfp-api
-Bundle-SymbolicName: bg.jug.workshop.liferay.cfp.api
-Bundle-Version: 1.0-SNAPSHOT
-Export-Package:\
-	bg.jug.workshop.liferay.cfp.exception,\
-	bg.jug.workshop.liferay.cfp.model,\
-	bg.jug.workshop.liferay.cfp.service,\
-	bg.jug.workshop.liferay.cfp.service.persistence
--includeresource: META-INF/service.xml=../cfp-service/service.xml
