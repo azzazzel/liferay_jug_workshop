@@ -1,0 +1,57 @@
+<div class="fragment_35274">
+
+<h2 style="text-align: center">
+  JUG Events
+</h2>
+
+<div id="jugEventsApp">
+  <div v-cloak="">
+    <ul class="timeline timeline-spacing-xl">
+      <li class="timeline-item" v-for="(event, index) in events">
+    		<div class="panel panel-secondary">
+    			<a v-bind:aria-controls="'panelCollapse' + index" aria-expanded="false" class="collapsed panel-header panel-header-link" data-toggle="collapse" v-bind:href="'#panelCollapse' + index" v-bind:id="'heading' + index" role="tab">
+
+    				<span class="panel-title">{{ event.name }}</span>
+            <div class="timeline-increment">
+    					<div class="rounded-circle sticker sticker-info sticker-xl">
+    						<span class="sticker-date">{{ event.date | toDate }}</span>
+    					</div>
+    				</div>
+
+    			</a>
+    			
+    			<div v-bind:aria-labelledby="'heading' + index" class="collapse panel-collapse" v-bind:id="'panelCollapse' + index" role="tabpanel">
+
+    				<div class="panel-body">
+                <div v-if="venues[event.venueId]">
+                  <div style="font-variant: small-caps;">Where:</div>
+                  <div style="padding-left:15px">{{ venues[event.venueId].name }}</div>
+                  <div style="padding-left:15px; font-size:70%; color: gray">{{ venues[event.venueId].address }}</div>
+                </div>
+                <div v-if="event.website">
+                  <div style="margin-top:10px; font-variant: small-caps;">Event website:</div>
+                  <div style="padding-left:15px">
+                    <a v-bind:href="event.website">{{ event.website }}</a>
+                  </div>
+                </div>
+                <div v-if="event.talks.length > 0">
+                  <div style="margin-top:10px; font-variant: small-caps;">Sessions:</div>
+                  <ul>
+                    <li v-for="talk in event.talks">
+                      <a v-bind:href="'/talk/-/talk/' + talk.talkId">
+                        {{ talk.title }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+    				</div>
+    				
+    			</div>
+    		</div>
+    	</li>
+    </ul>
+  </div>
+  <div id="mapid"></div>
+</div>
+  
+</div>

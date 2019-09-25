@@ -1,0 +1,168 @@
+<%--
+	Lets define all tag libraries we'll use across all JSPs in one place 
+	to avoid polluting the code by repeating the taglib declarations in every page
+ --%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+<%@ taglib uri="http://liferay.com/tld/ddm" prefix="liferay-ddm" %>
+<%@ taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %>
+<%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
+<%@ taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %>
+<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
+<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+<%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
+<%@ taglib uri="http://liferay.com/tld/map" prefix="liferay-map" %>
+
+<%--
+	Lets also import all classes we'll use across all JSPs in one place 
+	to avoid polluting the code by repeating the imports in every page
+ --%>
+
+<%@page import="bg.jug.workshop.liferay.cfp.admin.constants.CFPAdminPortletKeys"%>
+<%@page import="bg.jug.workshop.liferay.cfp.admin.display.EventSessionsRowChecker"%>
+<%@page import="bg.jug.workshop.liferay.cfp.exception.NoSuchTalkException"%>
+<%@page import="bg.jug.workshop.liferay.cfp.model.Event"%>
+<%@page import="bg.jug.workshop.liferay.cfp.model.Talk"%>
+<%@page import="bg.jug.workshop.liferay.cfp.model.Venue"%>
+<%@page import="bg.jug.workshop.liferay.cfp.service.EventLocalServiceUtil"%>
+<%@page import="bg.jug.workshop.liferay.cfp.service.TalkLocalServiceUtil"%>
+<%@page import="bg.jug.workshop.liferay.cfp.service.VenueLocalServiceUtil"%>
+
+<%@page import="com.liferay.dynamic.data.mapping.io.DDMFormValuesJSONDeserializer"%>
+<%@page import="com.liferay.dynamic.data.mapping.exception.NoSuchTemplateException"%>
+<%@page import="com.liferay.dynamic.data.mapping.model.DDMStructure"%>
+<%@page import="com.liferay.dynamic.data.mapping.model.DDMTemplate"%>
+<%@page import="com.liferay.dynamic.data.mapping.model.DDMTemplateConstants"%>
+<%@page import="com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"%>
+<%@page import="com.liferay.dynamic.data.mapping.service.DDMTemplateLocalServiceUtil"%>
+<%@page import="com.liferay.dynamic.data.mapping.storage.DDMFormValues"%>
+<%@page import="com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker"%>
+<%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
+<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+<%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portal.kernel.portlet.PortalPreferences"%>
+<%@page import="com.liferay.portal.kernel.portlet.PortletURLUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.service.ClassNameLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.theme.ThemeDisplay"%>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="com.liferay.portal.kernel.util.PortalUtil"%>
+<%@page import="com.liferay.portal.kernel.util.Validator"%>
+<%@page import="com.liferay.portal.kernel.util.WebKeys"%>
+
+<%@page import="java.util.List"%>
+<%@page import="javax.portlet.PortletURL"%>
+
+
+<%--
+	As we are dealing with portles it comes handy to add some generic portlet related variables to the page scope. 
+	This is where variables like `renderRequest`, `renderResponse`, `actionRequest`, `actionResponse`, ... 
+	come from. What variables this tag provides is defined in the JSR286. 
+	See: http://www.oracle.com/technetwork/java/jsr286-2-141964.html#Tag_Library 
+ --%>
+<portlet:defineObjects />
+
+<%--
+	Now lets include some variables about Liferay's objects in the page scope to make it easier
+	to pass data between tags. To know what variables exactly are added have a look at 
+	https://github.com/liferay/liferay-portal/blob/7.0.4-ga5/util-taglib/src/com/liferay/taglib/theme/DefineObjectsTag.java
+	The link points to GA5 source code. If you use different Liferay version, switch to the tag representing yours. 
+ --%>
+<liferay-theme:defineObjects />
+
+<%--
+	Lets also include some variables about Liferay's front-end in the page scope. 
+	To know what variables exactly are added have a look at 
+	https://github.com/liferay/liferay-portal/blob/7.0.4-ga5/modules/apps/foundation/frontend-taglib/frontend-taglib/src/main/java/com/liferay/frontend/taglib/servlet/taglib/DefineObjectsTag.java	
+	The link points to GA5 source code. If you use different Liferay version, switch to the tag representing yours. 
+ --%>
+<liferay-frontend:defineObjects />
+
+<%
+	/*
+	 *	RowChecker is needed in order for SearchContainer (whick we use to list talks, events and veues) to
+	 *  be able to add a checkbox in front of each list item. This in turns allows to select multiple items
+	 *  and perform an operation on all of them. 
+	 *  Unfortunatelly the usage of RowChecker is not a well documented anywhere. In most trivial cases 
+	 *  it should be OK to simply use EmptyOnClickRowChecker.
+	 */
+	RowChecker rowChecker = new EmptyOnClickRowChecker(renderResponse);
+			 
+			 
+	/*
+	 * Next part is as counfusing as it gets. We obtain PORTAL preferences from PORTLET factory and then
+	 * use the PORTAL preferences to store something with a PORTLET key. 
+	 * I wish I could explain that in a way that is easy to understand or at least put a link to the
+	 * documentation here, but sadly non of those are possible at the moment.
+	 * Just think of this two lines as like we are reading for some abstract storage how should we display things.
+	 * The part that puts that information in that storage is in CFPAdminPortlet#changeDisplayStyle method.
+	 */
+	PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(request);
+	String displayStyle = portalPreferences.getValue(CFPAdminPortletKeys.CFP_ADMIN, "display-style", "list");
+%>
+
+<%--
+	Below we generate URLs to some portlet actions. Those are made available as page variables
+	by the names provided in the `var`  (asString) or `varImpl` (as object) attributes.
+	 
+	Render URLs are used to change the view. They have `mvcPath` parameter which tells the 
+	portlet which JSP to forward to.
+	
+	Action URLs have are used to invoke actions. They have names that match a method name 
+	in CFPAdminPortlet which performs the action
+	
+	Both have `navigation` parameter which is used by `view.jsp` to know which tab to highlight.
+ --%>
+
+<liferay-portlet:actionURL name="changeDisplayStyle" varImpl="changeDisplayStyleURL">
+	<portlet:param name="redirect" value="<%= currentURL %>" />
+</liferay-portlet:actionURL>
+
+<portlet:renderURL var="talksURL">
+	<portlet:param name="mvcPath" value="/view.jsp" />
+	<portlet:param name="navigation" value="talks" />
+</portlet:renderURL>
+
+<portlet:actionURL name='saveTalk' var="saveTalkURL" >
+	<portlet:param name="navigation" value="talks" />
+</portlet:actionURL>
+
+<portlet:actionURL name="deleteTalk" var="deleteTalkURL">
+	<portlet:param name="navigation" value="talks" />
+</portlet:actionURL>
+
+
+<portlet:renderURL var="eventsURL">
+	<portlet:param name="mvcPath" value="/view.jsp" />
+	<portlet:param name="navigation" value="events" />
+</portlet:renderURL>
+
+<portlet:actionURL name='saveEvent' var="saveEventURL" >
+	<portlet:param name="navigation" value="events" />
+</portlet:actionURL>
+
+<portlet:actionURL name="deleteEvent" var="deleteEventURL">
+	<portlet:param name="navigation" value="events" />
+</portlet:actionURL>
+
+
+<portlet:renderURL var="venuesURL">
+	<portlet:param name="mvcPath" value="/view.jsp" />
+	<portlet:param name="navigation" value="venues" />
+</portlet:renderURL>
+
+<portlet:actionURL name='saveVenue' var="saveVenueURL" >
+	<portlet:param name="navigation" value="venues" />
+</portlet:actionURL>
+
+<portlet:actionURL name="deleteVenue" var="deleteVenueURL">
+	<portlet:param name="navigation" value="venues" />
+</portlet:actionURL>
+
+
+

@@ -1,0 +1,4 @@
+#Liferay-Configuration-Path: /configuration
+
+-includeresource: lib/gson.jar=gson*.jar;lib:=true
+

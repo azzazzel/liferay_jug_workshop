@@ -1,0 +1,21 @@
+<div class="fragment_34395">
+
+<h2 style="text-align: center">The JUG team</h2>
+
+  <div class="container" id="jugLeadersApp">
+    <div v-cloak="">
+      <div class="row" v-for="person in people">
+        <div class="col col-sm-2">
+          <img v-bind:alt="person.name" v-bind:src="'/image/user_male_portrait?img_id=' + person.imageId + '&amp;img_id_token=' + person.imageUUID">
+        </div>
+        <div class="col col-sm-10">
+          <h3>{{ person.name }}</h3> {{ person.description }}
+          <h5>Websites:</h5>
+          <div v-for="website in person.websites">
+            <span>{{ website.type }}:</span> <a v-link:href="website.url"> {{ website.url }} </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,3 +2,5 @@
 experiments
 liferay-ce-*
 **/.DS_Store
+images
+**/node_modules

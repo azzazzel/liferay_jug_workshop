@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_2_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="bg.jug.workshop.liferay.cfp">
+
+	<namespace>CFP</namespace>
+
+	<entity name="Talk" local-service="true" remote-service="true" cache-enabled="true" uuid="true">
+
+		<!-- Group instance -->
+        <column name="companyId" type="long" />
+        <column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+        <column name="userId" type="long" />
+        <column name="userName" type="String" />
+        <column name="createDate" type="Date" />
+        <column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+        <column name="talkId" primary="true" type="long" />
+
+		<!-- Entity fields -->
+		<column name="title" type="String"  />
+		<column name="data" type="String" />
+
+		<!-- Relations fields -->
+		<column name="structureId" type="long" />
+		<column name="templateId" type="long" />
+        <column name="eventId" type="Collection" entity="Event"  mapping-table="Talk_Event" />
+
+		<!-- Finders -->
+        <finder name="CompanyAndGroup" return-type="Collection">
+            <finder-column name="companyId" />
+            <finder-column name="groupId" />
+        </finder>
+        
+        <reference entity="DDMStructureLink" package-path="com.liferay.dynamic.data.mapping"></reference>
+        <reference entity="DDMTemplateLink" package-path="com.liferay.dynamic.data.mapping"></reference>
+	</entity>
+	
+	<entity name="Event" local-service="true" remote-service="true" cache-enabled="true" uuid="true">
+
+		<!-- Group instance -->
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+		<column name="eventId" type="long" primary="true" />
+
+		<!-- Entity fields -->
+        <column name="name" type="String" />
+        <column name="date" type="Date" />
+        <column name="website" type="String" />
+        
+		<!-- Relations fields -->
+        <column name="venueId" type="long" />
+        <column name="calendarBookingId" type="long" />
+        <column name="talkId" type="Collection" entity="Talk"  mapping-table="Talk_Event" />
+
+		<!-- Finders -->
+        <finder name="CompanyAndGroup" return-type="Collection">
+            <finder-column name="companyId" />
+            <finder-column name="groupId" />
+        </finder>
+
+        <order by="desc">
+            <order-column name="date" />
+        </order>
+        
+	</entity>
+
+	<entity name="Venue" local-service="true" remote-service="true" cache-enabled="true" uuid="true">
+
+		<!-- Group instance -->
+		<column name="companyId" type="long" />
+        <column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+        <column name="venueId" type="long" primary="true" />
+
+		<!-- Entity fields -->
+        <column name="name" type="String" />
+        <column name="address" type="String" />
+		<column name="latitude" type="double" />
+		<column name="longitude" type="double" />
+        
+		<!-- Finders -->
+        <finder name="CompanyAndGroup" return-type="Collection">
+            <finder-column name="companyId" />
+            <finder-column name="groupId" />
+        </finder>
+	</entity>
+
+</service-builder>

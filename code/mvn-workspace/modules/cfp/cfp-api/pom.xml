@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>bg.jug.workshop.liferay</groupId>
+		<artifactId>cfp</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>cfp-api</artifactId>
+
+	<dependencies>
+		<dependency>
+			<!-- Liferay's core -->
+			<groupId>com.liferay.portal</groupId>
+			<artifactId>com.liferay.portal.kernel</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Declarative services annotations -->
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.component.annotations</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Bnd annotations -->
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.bnd.annotation</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Liferay's OSGi Util -->
+			<groupId>com.liferay</groupId>
+			<artifactId>com.liferay.osgi.util</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- OSGi's Tracker API -->
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.util.tracker</artifactId>
+			<version>1.5.2</version>
+		</dependency>
+
+		<dependency>
+			<!-- OSGi's Framework API -->
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.framework</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

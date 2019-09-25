@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>bg.jug.workshop.liferay</groupId>
+		<artifactId>cfp</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>cfp-service</artifactId>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>bg.jug.workshop.liferay</groupId>
+			<artifactId>cfp-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<!-- Liferay's core -->
+			<groupId>com.liferay.portal</groupId>
+			<artifactId>com.liferay.portal.kernel</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Liferay's Spring Extender API -->
+			<groupId>com.liferay</groupId>
+			<artifactId>com.liferay.portal.spring.extender.api</artifactId>
+		</dependency>
+
+		<dependency>
+		  <groupId>com.liferay</groupId>
+		  <artifactId>com.liferay.petra.string</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Liferay's Dynamic Data Mapping API -->
+			<groupId>com.liferay</groupId>
+			<artifactId>com.liferay.dynamic.data.mapping.api</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Liferay's Calendar API -->
+			<groupId>com.liferay</groupId>
+			<artifactId>com.liferay.calendar.api</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Declarative services annotations -->
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.component.annotations</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Bnd annotations -->
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.bnd.annotation</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+
+ 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.liferay</groupId>
+				<artifactId>com.liferay.portal.tools.service.builder</artifactId>
+				<version>1.0.173</version>
+				<configuration>
+					<apiDirName>../cfp-api/src/main/java</apiDirName>
+					<autoNamespaceTables>true</autoNamespaceTables>
+					<buildNumberIncrement>true</buildNumberIncrement>
+					<hbmFileName>src/main/resources/META-INF/module-hbm.xml</hbmFileName>
+					<implDirName>src/main/java</implDirName>
+					<mergeModelHintsConfigs>src/main/resources/META-INF/portlet-model-hints.xml</mergeModelHintsConfigs>
+					<modelHintsFileName>src/main/resources/META-INF/portlet-model-hints.xml</modelHintsFileName>
+					<osgiModule>true</osgiModule>
+					<propsUtil>bg.jug.workshop.liferay.cfp.service.util.ServiceProps</propsUtil>
+					<resourcesDirName>src/main/resources</resourcesDirName>
+					<springFileName>src/main/resources/META-INF/spring/module-spring.xml</springFileName>
+					<sqlDirName>src/main/resources/META-INF/sql</sqlDirName>
+					<sqlFileName>tables.sql</sqlFileName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

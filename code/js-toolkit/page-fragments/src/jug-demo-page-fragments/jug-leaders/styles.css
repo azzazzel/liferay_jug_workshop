@@ -1,0 +1,18 @@
+.fragment_34395 .row {
+  display: flex; 
+  margin: 50px 0px;
+}
+
+.fragment_34395 img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.fragment_34395 [v-cloak] {
+  display: none;
+}
