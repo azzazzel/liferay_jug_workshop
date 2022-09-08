@@ -20,7 +20,7 @@
     "preview": "yo liferay-fragments:preview"
   },
   "devDependencies": {
-    "generator-liferay-fragments": "^1.3.0",
+    "generator-liferay-fragments": "^1.10.0",
     "yo": "^3.1.0"
   }
 }
